@@ -6,34 +6,35 @@ function EstimateSummary({ estimate }) {
   };
 
   const urethaneTotal = () => {
+    const u = estimate.waterproof.urethane;
+
     const materials =
-      estimate.waterproof.urethane.materials.hado * 65000 +
-      estimate.waterproof.urethane.materials.jungdo * 70000 +
-      estimate.waterproof.urethane.materials.sangdo * 120000 +
-      estimate.waterproof.urethane.materials.thinner * 50000;
+      u.materials.hado * 65000 +
+      u.materials.jungdo * 70000 +
+      u.materials.sangdo * 120000 +
+      u.materials.thinner * 50000;
 
-    const supplies = 70000 + estimate.waterproof.urethane.errorMargin;
+    const hasUrethane = Object.values(u.materials).some((qty) => qty > 0);
+    const supplies = (hasUrethane ? 70000 : 0) + u.errorMargin;
 
-    const labor = estimate.waterproof.urethane.workers.reduce(
-      (sum, worker) => sum + worker.price,
-      0
-    );
+    const labor = u.workers.reduce((sum, w) => sum + w.price, 0);
 
     return { materials, supplies, labor, total: materials + supplies + labor };
   };
 
   const liquidTotal = () => {
+    const l = estimate.waterproof.liquid;
+
     const materials =
-      estimate.waterproof.liquid.materials.cement * 10000 +
-      estimate.waterproof.liquid.materials.mortar * 10000 +
-      estimate.waterproof.liquid.materials.waterproofLiquid * 50000;
+      l.materials.cement * 10000 +
+      l.materials.mortar * 10000 +
+      l.materials.waterproofLiquid * 50000;
 
-    const supplies = 50000 + estimate.waterproof.liquid.errorMargin;
+    // ✅ 재료가 하나라도 있으면 기본금액 + 오차금액 포함
+    const hasLiquid = Object.values(l.materials).some((qty) => qty > 0);
+    const supplies = (hasLiquid ? 50000 : 0) + l.errorMargin;
 
-    const labor = estimate.waterproof.liquid.workers.reduce(
-      (sum, worker) => sum + worker.price,
-      0
-    );
+    const labor = l.workers.reduce((sum, w) => sum + w.price, 0);
 
     return { materials, supplies, labor, total: materials + supplies + labor };
   };
