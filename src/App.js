@@ -35,7 +35,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-700 pb-10">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-700 pb-10 select-none">
       <header className="bg-white p-10 text-center shadow-lg">
         <h1 className="text-4xl text-gray-800 mb-2 font-bold">
           🏠 인테리어 견적 계산기
