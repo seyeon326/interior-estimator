@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import WaterproofSection from "./components/WaterproofSection";
 import TileSection from "./components/TileSection";
 import EstimateSummary from "./components/EstimateSummary";
+import LaborCost from "./components/LaborCost";
 
 function App() {
+  const [totalLabor, setTotalLabor] = useState(0);
+
   const [estimate, setEstimate] = useState({
     waterproof: {
       urethane: {
@@ -56,7 +59,9 @@ function App() {
           onUpdate={(data) => updateEstimate("tile", data)}
         />
 
-        <EstimateSummary estimate={estimate} />
+        <LaborCost onLaborChange={setTotalLabor} />
+
+        <EstimateSummary estimate={estimate} totalLabor={totalLabor} />
       </main>
 
       <footer className="text-center p-5 text-white mt-10">

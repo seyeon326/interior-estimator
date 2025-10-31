@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import MaterialCounter from "./MaterialCounter";
-import WorkerManager from "./WorkerManager";
 
 function TileSection({ data, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -161,13 +160,6 @@ function TileSection({ data, onUpdate }) {
                 />
               </div>
             </div>
-
-            <WorkerManager
-              workers={data.workers}
-              basePrice={170000}
-              expertPrice={250000}
-              onChange={(workers) => onUpdate({ ...data, workers })}
-            />
           </div>
         </>
       )}

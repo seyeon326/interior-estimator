@@ -1,6 +1,6 @@
 import React from "react";
 
-function EstimateSummary({ estimate }) {
+function EstimateSummary({ estimate, totalLabor }) {
   const formatPrice = (value) => {
     return value.toLocaleString("ko-KR");
   };
@@ -17,9 +17,7 @@ function EstimateSummary({ estimate }) {
     const hasUrethane = Object.values(u.materials).some((qty) => qty > 0);
     const supplies = (hasUrethane ? 70000 : 0) + u.errorMargin;
 
-    const labor = u.workers.reduce((sum, w) => sum + w.price, 0);
-
-    return { materials, supplies, labor, total: materials + supplies + labor };
+    return { materials, supplies, total: materials + supplies };
   };
 
   const liquidTotal = () => {
@@ -30,13 +28,10 @@ function EstimateSummary({ estimate }) {
       l.materials.mortar * 10000 +
       l.materials.waterproofLiquid * 50000;
 
-    // ✅ 재료가 하나라도 있으면 기본금액 + 오차금액 포함
     const hasLiquid = Object.values(l.materials).some((qty) => qty > 0);
     const supplies = (hasLiquid ? 50000 : 0) + l.errorMargin;
 
-    const labor = l.workers.reduce((sum, w) => sum + w.price, 0);
-
-    return { materials, supplies, labor, total: materials + supplies + labor };
+    return { materials, supplies, total: materials + supplies };
   };
 
   const tileTotal = () => {
@@ -47,19 +42,15 @@ function EstimateSummary({ estimate }) {
       estimate.tile.options.floatMortar * 8000 +
       estimate.tile.options.pressCement * 10000;
 
-    const labor = estimate.tile.workers.reduce(
-      (sum, worker) => sum + worker.price,
-      0
-    );
-
-    return { materials, labor, total: materials + labor };
+    return { materials, total: materials };
   };
 
   const urethane = urethaneTotal();
   const liquid = liquidTotal();
   const tile = tileTotal();
 
-  const grandTotal = urethane.total + liquid.total + tile.total;
+  const grandTotal =
+    urethane.total + liquid.total + tile.total + (totalLabor || 0);
 
   return (
     <div className="bg-white rounded-2xl p-8 shadow-xl sticky top-5">
@@ -82,10 +73,6 @@ function EstimateSummary({ estimate }) {
               <div className="flex justify-between items-center py-2 text-gray-700">
                 <span>부자재</span>
                 <span>{formatPrice(urethane.supplies)}원</span>
-              </div>
-              <div className="flex justify-between items-center py-2 text-gray-700">
-                <span>인건비</span>
-                <span>{formatPrice(urethane.labor)}원</span>
               </div>
               <div className="flex justify-between items-center py-2 mt-1 pt-4 border-t-2 border-gray-300 text-lg">
                 <span>소계</span>
@@ -112,10 +99,6 @@ function EstimateSummary({ estimate }) {
                 <span>부자재</span>
                 <span>{formatPrice(liquid.supplies)}원</span>
               </div>
-              <div className="flex justify-between items-center py-2 text-gray-700">
-                <span>인건비</span>
-                <span>{formatPrice(liquid.labor)}원</span>
-              </div>
               <div className="flex justify-between items-center py-2 mt-1 pt-4 border-t-2 border-gray-300 text-lg">
                 <span>소계</span>
                 <strong className="text-indigo-500 text-xl">
@@ -137,14 +120,27 @@ function EstimateSummary({ estimate }) {
                 <span>재료비</span>
                 <span>{formatPrice(tile.materials)}원</span>
               </div>
-              <div className="flex justify-between items-center py-2 text-gray-700">
-                <span>인건비</span>
-                <span>{formatPrice(tile.labor)}원</span>
-              </div>
               <div className="flex justify-between items-center py-2 mt-1 pt-4 border-t-2 border-gray-300 text-lg">
                 <span>소계</span>
                 <strong className="text-indigo-500 text-xl">
                   {formatPrice(tile.total)}원
+                </strong>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {totalLabor > 0 && (
+          <div className="bg-gray-100 p-5 rounded-xl">
+            <h3 className="text-xl text-gray-700 mb-4 font-semibold flex items-center gap-2">
+              <span className="text-indigo-500 text-2xl">•</span>
+              인건비
+            </h3>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center py-2 mt-1 pt-4 border-t-2 border-gray-300 text-lg">
+                <span>소계</span>
+                <strong className="text-indigo-500 text-xl">
+                  {formatPrice(totalLabor)}원
                 </strong>
               </div>
             </div>

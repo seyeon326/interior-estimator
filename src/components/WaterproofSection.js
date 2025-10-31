@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import MaterialCounter from "./MaterialCounter";
-import WorkerManager from "./WorkerManager";
 
 function WaterproofSection({ data, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -113,13 +112,6 @@ function WaterproofSection({ data, onUpdate }) {
                 step={10000}
               />
             </div>
-
-            <WorkerManager
-              workers={data.urethane.workers}
-              basePrice={170000}
-              expertPrice={200000}
-              onChange={(workers) => updateUrethane("workers", workers)}
-            />
           </div>
 
           {/* 액체방수 */}
@@ -168,13 +160,6 @@ function WaterproofSection({ data, onUpdate }) {
                 step={10000}
               />
             </div>
-
-            <WorkerManager
-              workers={data.liquid.workers}
-              basePrice={170000}
-              expertPrice={350000}
-              onChange={(workers) => updateLiquid("workers", workers)}
-            />
           </div>
         </>
       )}
